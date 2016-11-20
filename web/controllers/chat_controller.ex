@@ -72,6 +72,20 @@ defmodule Polibot.ChatController do
     render conn, "fb_callback.json"
   end
 
+  # Show country stats
+  def chat(conn, %{"entry" => [%{"messaging" => [%{"postback" => %{"payload" => "Show country stats"},
+                                                   "recipient" => %{"id" => page_id},
+                                                   "sender" => %{"id" => user_id}}|_]}|_]}) do
+    candidate = CandidateQueries.by_fb_id(user_id) |> Repo.one!
+    country = Repo.get!(Country, candidate.country_id)
+    # Send country stats
+    stats = CountryServices.calculate_stats(country)
+    stats_message = MessageServices.text(candidate.fb_id, stats) |> Poison.encode!
+    HTTPotion.post!(@messages_url, [body: stats_message, status_code: 200,
+                                    headers: ["Content-Type": "application/json"]])
+    render conn, "fb_callback.json"
+  end
+
   def chat(conn, %{"entry" => [%{"messaging" => [%{"message" => %{"text" => text}}|_]}|_]}) do
     IO.puts text
     render conn, "fb_callback.json"

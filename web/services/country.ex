@@ -27,6 +27,23 @@ defmodule Polibot.CountryServices do
     "This is your country: It's name is #{country.name}, it has 4 states."
   end
 
+  def calculate_stats(country) do
+    "✍🏻 Name - #{country.name}
+    👩‍👩‍👧‍👦 Population - 679129841
+    💰 Average salary - $86K
+    🏘 Human development - 72%
+    💲💲💲 Rich people - 12%
+    💲 Poor people - 27%
+    🎂 Average age - 42
+    🚶 Foreigners - 16%
+    🙏 Religion - Atheism
+    ↔️ Tendency - Conservatism
+    👫 Gender
+      👩 Woman - 45%
+      👱 Man - 42%
+      👤 Other - 13%"
+  end
+
   defp assign_random(:name) do
     [name] = Enum.take_random(@names, 1)
     name
