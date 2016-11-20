@@ -86,6 +86,12 @@ defmodule Polibot.ChatController do
     stats_message = MessageServices.text(candidate.fb_id, stats) |> Poison.encode!
     HTTPotion.post!(@messages_url, [body: stats_message, status_code: 200,
                                     headers: ["Content-Type": "application/json"]])
+    # Invite to begin campaign!
+    invite = "Are you ready to start your campaign?"
+    buttons = [MessageServices.postback_button("Yeah, I'm ready!", "Yeah, I'm ready!")]
+    invite_message = MessageServices.button_template(candidate.fb_id, invite, buttons) |> Poison.encode!
+    HTTPotion.post!(@messages_url, [body: invite_message, status_code: 200,
+                                    headers: ["Content-Type": "application/json"]])
     render conn, "fb_callback.json"
   end
 
