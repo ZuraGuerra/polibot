@@ -34,7 +34,7 @@ defmodule Polibot.ChatController do
                                     headers: ["Content-Type": "application/json"]])
     # Send background story
     background_story = CandidateServices.generate_story(candidate)
-    buttons = [MessageServices.postback_button("View my stats", "View my stats")]
+    buttons = [MessageServices.postback_button("My ratings?", "My ratings?")]
     background_message = MessageServices.button_template(candidate.fb_id, background_story, buttons) |> Poison.encode!
     HTTPotion.post!(@messages_url, [body: background_message, status_code: 200,
                                     headers: ["Content-Type": "application/json"]])
@@ -42,7 +42,7 @@ defmodule Polibot.ChatController do
   end
 
   # Check player stats
-  def chat(conn, %{"entry" => [%{"messaging" => [%{"postback" => %{"payload" => "View my stats"},
+  def chat(conn, %{"entry" => [%{"messaging" => [%{"postback" => %{"payload" => "My ratings?"},
                                                    "recipient" => %{"id" => page_id},
                                                    "sender" => %{"id" => user_id}}|_]}|_]}) do
     candidate = CandidateQueries.by_fb_id(user_id) |> Repo.one!
@@ -57,8 +57,8 @@ defmodule Polibot.ChatController do
     HTTPotion.post!(@messages_url, [body: stats_message, status_code: 200,
                                     headers: ["Content-Type": "application/json"]])
     # Invite to see country stats
-    invite = "Do you want to see your country?"
-    buttons = [MessageServices.postback_button("Show my country", "Show my country")]
+    invite = "We live in a beautiful country. Do you want me to show you the map?"
+    buttons = [MessageServices.postback_button("Let's see", "Let's see")]
     background_message = MessageServices.button_template(candidate.fb_id, invite, buttons) |> Poison.encode!
     HTTPotion.post!(@messages_url, [body: background_message, status_code: 200,
                                     headers: ["Content-Type": "application/json"]])
@@ -66,7 +66,7 @@ defmodule Polibot.ChatController do
   end
 
   # Check player's country
-  def chat(conn, %{"entry" => [%{"messaging" => [%{"postback" => %{"payload" => "Show my country"},
+  def chat(conn, %{"entry" => [%{"messaging" => [%{"postback" => %{"payload" => "Let's see"},
                                                    "recipient" => %{"id" => page_id},
                                                    "sender" => %{"id" => user_id}}|_]}|_]}) do
     # Show country's map
@@ -78,7 +78,7 @@ defmodule Polibot.ChatController do
                                     headers: ["Content-Type": "application/json"]])
     # Invite to see country stats
     country_story = CountryServices.story(country)
-    buttons = [MessageServices.postback_button("Show country stats", "Show country stats")]
+    buttons = [MessageServices.postback_button("Show infographic", "Show infographic")]
     story_message = MessageServices.button_template(candidate.fb_id, country_story, buttons) |> Poison.encode!
     HTTPotion.post!(@messages_url, [body: story_message, status_code: 200,
                                     headers: ["Content-Type": "application/json"]])
@@ -86,7 +86,7 @@ defmodule Polibot.ChatController do
   end
 
   # Show country stats
-  def chat(conn, %{"entry" => [%{"messaging" => [%{"postback" => %{"payload" => "Show country stats"},
+  def chat(conn, %{"entry" => [%{"messaging" => [%{"postback" => %{"payload" => "Show infographic"},
                                                    "recipient" => %{"id" => page_id},
                                                    "sender" => %{"id" => user_id}}|_]}|_]}) do
     candidate = CandidateQueries.by_fb_id(user_id) |> Repo.one!

@@ -24,7 +24,7 @@ defmodule Polibot.CountryServices do
   end
 
   def story(country) do
-    "This is your country: It's name is #{country.name}, it has 4 states."
+    "This is our country: It's name is #{country.name}, it has 4 states ruled by one Central Constitution. The average age of the #{country.name}ans is 42..."
   end
 
   def calculate_stats(country) do
