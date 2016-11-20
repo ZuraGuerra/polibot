@@ -1,14 +1,26 @@
-defmodule Polibot.CandidateInfoServices do
+defmodule Polibot.InfoServices do
   @races ["Latino", "White", "Asian", "Black"]
   @genders ["Female", "Male"]
   @tendencies ["Liberalism", "Conservatism"]
   @last_names ["Zhou", "Lee", "Deschamps", "Lewis", "Ochoa", "Riviera", "Miller"]
   @female_first_names ["Laura", "Janina", "Bonita", "María", "Katherine", "Yoon", "Cindy", "Qiu"]
   @male_first_names ["John", "George", "Raul", "Pedro", "Goro", "Ichirou", "Ade", "Fatou"]
+  @state_names ["Ance", "Bora", "Yamahina", "Poola", "Reij", "Anchara", "Xi", "Govinda", "Biou"]
+  @religions ["Buddhism", "Christianism", "Sikhism", "Ateism", "Voodoo", "Protestantism"]
 
   def assign_random(:race) do
     [race] = Enum.take_random(@races, 1)
     race
+  end
+
+  def assign_random(:religion) do
+    [religion] = Enum.take_random(@religions, 1)
+    religion
+  end
+
+  def assign_random(:state_names) do
+    [name] = Enum.take_random(@state_names, 1)
+    name
   end
 
   def assign_random(:gender) do

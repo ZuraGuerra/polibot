@@ -1,5 +1,5 @@
 defmodule Polibot.CandidateServices do
-  alias Polibot.{InfoDictionaries, Candidate, CandidateChangesets, Repo}
+  alias Polibot.{Candidate, CandidateChangesets, Repo}
 
   @avatar_url "https://github.com/ZuraGuerra/polibot/raw/master/web/static/images/"
 
@@ -44,7 +44,7 @@ defmodule Polibot.CandidateServices do
   end
 
   defp generate_info(fb_id, country_id) do
-    import Polibot.CandidateInfoServices
+    import Polibot.InfoServices
 
     info = %{fb_id: fb_id, country_id: country_id}
          |> Map.put(:race, assign_random(:race))
