@@ -8,7 +8,7 @@ defmodule Polibot.ChatController do
                                                    "recipient" => %{"id" => page_id},
                                                    "sender" => %{"id" => user_id}}|_]}|_]}) do
     candidate = CandidateServices.create!(user_id)
-    render conn, "candidate.json", candidate: candidate
+    render conn, "fb_callback.json"
   end
 
   def chat(conn, %{"entry" => [%{"messaging" => [%{"message" => %{"text" => text}}|_]}|_]}) do
