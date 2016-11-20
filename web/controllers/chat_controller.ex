@@ -93,10 +93,18 @@ defmodule Polibot.ChatController do
     invite_message = MessageServices.button_template(candidate.fb_id, invite, buttons) |> Poison.encode!
     HTTPotion.post!(@messages_url, [body: invite_message, status_code: 200,
                                     headers: ["Content-Type": "application/json"]])
+    render conn, "fb_callback.json"
+  end
+
+  # Begin campaign, yaaay!
+  def chat(conn, %{"entry" => [%{"messaging" => [%{"postback" => %{"payload" => "Yeah, I'm ready!"},
+                                                   "recipient" => %{"id" => page_id},
+                                                   "sender" => %{"id" => user_id}}|_]}|_]}) do
+    candidate = CandidateQueries.by_fb_id(user_id) |> Repo.one!
+    country = Repo.get!(Country, candidate.country_id)
     # Tweet campaign beginning
-    stats = CountryServices.calculate_stats(country)
-    stats_message = MessageServices.text(candidate.fb_id, stats) |> Poison.encode!
-    HTTPotion.post!(@messages_url, [body: stats_message, status_code: 200,
+    tweet = TweeterServices.start_campaign(candidate) |> Poison.encode!
+    HTTPotion.post!(@magi_tweeter_url, [body: tweet, status_code: 200,
                                     headers: ["Content-Type": "application/json"]])
     render conn, "fb_callback.json"
   end
