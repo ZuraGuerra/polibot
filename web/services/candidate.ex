@@ -12,6 +12,18 @@ defmodule Polibot.CandidateServices do
     end
   end
 
+  def generate_story(candidate) do
+    first = "You are #{candidate.first_name} #{candidate.last_name}."
+    second = case candidate.gender do
+      "Female" -> "You were the first #{candidate.race} Congress woman "
+      "Male" -> "You were the first #{candidate.race} Congress man "
+    end
+    third = "and the youngest one to run for President from your state.
+             You care about people and you want to take your country to
+             the next level."
+    first <> second <> third
+  end
+
   def get_avatar(candidate) do
     @avatar_url <> candidate.gender <> "-" <> candidate.race <> ".jpg"
   end
