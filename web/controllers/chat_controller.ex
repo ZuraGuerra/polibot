@@ -135,7 +135,7 @@ defmodule Polibot.ChatController do
     CandidateQueries.by_fb_id(user_id) |> Repo.one! |> Repo.delete!
     # Ask to delete conversation
     invite = "To fully restart the game, please delete this conversation and talk to me again. Thanks for playing The Assistant 🏁 🎉"
-    deletion_message = MessageServices.text(candidate.fb_id, invite) |> Poison.encode!
+    deletion_message = MessageServices.text(user_id, invite) |> Poison.encode!
     HTTPotion.post!(@messages_url, [body: deletion_message, status_code: 200,
                                     headers: ["Content-Type": "application/json"]])
     render conn, "fb_callback.json"
