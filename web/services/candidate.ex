@@ -12,8 +12,9 @@ defmodule Polibot.CandidateServices do
     end
   end
 
-  def get_avatar(candidate),
-    do: @avatar_url <> candidate.gender <> "-" <> candidate.race ".jpg"
+  def get_avatar(candidate) do
+    @avatar_url <> candidate.gender <> "-" <> candidate.race <> ".jpg"
+  end
 
   defp generate_info(fb_id) do
     import Polibot.CandidateInfoServices
