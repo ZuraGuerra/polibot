@@ -6,6 +6,5 @@ defmodule Polibot.CandidateChangesets do
   def creation(struct, params \\ %{}) do
     struct
     |> cast(params, @params)
-    |> validate_required(params, @params)
   end
 end

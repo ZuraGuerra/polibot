@@ -22,6 +22,7 @@ defmodule Polibot.Router do
   scope "/api", Polibot do
     pipe_through :api
 
-    get "/chat", ChatController, :fb_callback
+    get "/chat", ChatController, :chat
+    post "/chat", ChatController, :chat
   end
 end
