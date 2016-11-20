@@ -127,6 +127,20 @@ defmodule Polibot.ChatController do
     render conn, "fb_callback.json"
   end
 
+  # Reset game
+  def chat(conn, %{"entry" => [%{"messaging" => [%{"postback" => %{"payload" => "Reset"},
+                                                   "recipient" => %{"id" => page_id},
+                                                   "sender" => %{"id" => user_id}}|_]}|_]}) do
+    # Delete candidate
+    CandidateQueries.by_fb_id(user_id) |> Repo.one! |> Repo.delete!
+    # Ask to delete conversation
+    invite = "To fully restart the game, please delete this conversation and talk to me again. Thanks for playing The Assistant 🏁 🎉"
+    deletion_message = MessageServices.text(candidate.fb_id, invite) |> Poison.encode!
+    HTTPotion.post!(@messages_url, [body: deletion_message, status_code: 200,
+                                    headers: ["Content-Type": "application/json"]])
+    render conn, "fb_callback.json"
+  end
+
   def chat(conn, %{"entry" => [%{"messaging" => [%{"message" => %{"text" => text}}|_]}|_]}) do
     IO.puts text
     render conn, "fb_callback.json"
