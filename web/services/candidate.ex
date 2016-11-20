@@ -12,11 +12,28 @@ defmodule Polibot.CandidateServices do
     end
   end
 
+  def generate_stats(candidate) do
+    popularity = cond do
+      candidate.popularity >= 50 -> "👍 Popularity - #{candidate.popularity}%\n"
+      candidate.popularity < 50 -> "👎 Popularity - #{candidate.popularity}%\n"
+    end
+    charisma = cond do
+      candidate.charisma >= 50 -> "😁 Charisma - #{candidate.charisma}%\n"
+      candidate.charisma < 50 -> "😒 Charisma - #{candidate.charisma}%\n"
+    end
+    budget = cond do
+      candidate.budget >= 20000 -> "💵 Budget - $#{candidate.budget}\n"
+      candidate.budget < 20000 -> "💸 Budget - $#{candidate.budget}\n"
+    end
+    tendency = "↔️ Tendency - #{candidate.tendency}"
+    popularity <> charisma <> budget <> tendency
+  end
+
   def generate_story(candidate) do
     first = "You are #{candidate.first_name} #{candidate.last_name}."
     second = case candidate.gender do
-      "Female" -> "You were the first #{candidate.race} Congress woman "
-      "Male" -> "You were the first #{candidate.race} Congress man "
+      "Female" -> "You were the first #{candidate.race} woman in the Congress "
+      "Male" -> "You were the first #{candidate.race} man in the Congress "
     end
     third = "and the youngest one to run for President from your state. You care about people and you want to take your country to the next level."
     first <> second <> third
