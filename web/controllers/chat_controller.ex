@@ -1,7 +1,7 @@
 defmodule Polibot.ChatController do
   use Polibot.Web, :controller
   alias Polibot.{CandidateServices, CandidateQueries, CountryServices,
-                 MessageServices, Repo}
+                 MessageServices, Repo, Country}
 
   @messages_url "https://graph.facebook.com/v2.6/me/messages?access_token=" <> System.get_env("POLIBOT_FB_TOKEN")
 
@@ -55,7 +55,13 @@ defmodule Polibot.ChatController do
   def chat(conn, %{"entry" => [%{"messaging" => [%{"postback" => %{"payload" => "Show my country"},
                                                    "recipient" => %{"id" => page_id},
                                                    "sender" => %{"id" => user_id}}|_]}|_]}) do
+    # Show country's map
     candidate = CandidateQueries.by_fb_id(user_id) |> Repo.one!
+    country = Repo.get!(Country, candidate.country_id)
+    country_map = CountryServices.map_url(country)
+    map_message = MessageServices.image(candidate.fb_id, country_map) |> Poison.encode!
+    HTTPotion.post!(@messages_url, [body: map_message, status_code: 200,
+                                    headers: ["Content-Type": "application/json"]])
     render conn, "fb_callback.json"
   end
 
