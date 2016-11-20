@@ -14,7 +14,7 @@ defmodule Polibot.ChatController do
     # Send avatar
     avatar_message = MessageServices.image(candidate.fb_id, avatar_url) |> Poison.encode!
     HTTPotion.post!(@messages_url, [body: avatar_message, status_code: 200,
-                                   headers: ["Content-Type": "application/json"]])
+                                    headers: ["Content-Type": "application/json"]])
     # Send background story
     background_story = CandidateServices.generate_story(candidate)
     buttons = [MessageServices.postback_button("View my stats", "View my stats")]
@@ -34,13 +34,18 @@ defmodule Polibot.ChatController do
     stats_title = "https://github.com/ZuraGuerra/polibot/raw/master/web/static/images/presidential-stats.jpg"
     stats_message = MessageServices.image(candidate.fb_id, stats_title) |> Poison.encode!
     HTTPotion.post!(@messages_url, [body: stats_message, status_code: 200,
-                                  headers: ["Content-Type": "application/json"]])
-    # Send background story
-    background_story = CandidateServices.generate_story(candidate)
-    buttons = [MessageServices.postback_button("View my stats", "View my stats")]
-    background_message = MessageServices.button_template(candidate.fb_id, background_story, buttons) |> Poison.encode!
+                                    headers: ["Content-Type": "application/json"]])
+    # Send politic stats
+    stats = CandidateServices.generate_stats(candidate)
+    stats_message = MessageServices.text(candidate.fb_id, stats) |> Poison.encode!
+    HTTPotion.post!(@messages_url, [body: stats_message, status_code: 200,
+                                    headers: ["Content-Type": "application/json"]])
+    # Invite to see country stats
+    invite = "Do you want to see your country?"
+    buttons = [MessageServices.postback_button("Show my country", "Show my country")]
+    background_message = MessageServices.button_template(candidate.fb_id, invite, buttons) |> Poison.encode!
     HTTPotion.post!(@messages_url, [body: background_message, status_code: 200,
-                                   headers: ["Content-Type": "application/json"]])
+                                    headers: ["Content-Type": "application/json"]])
     render conn, "fb_callback.json"
   end
 

@@ -48,4 +48,15 @@ defmodule Polibot.MessageServices do
       "payload" => payload
     }
   end
+
+  def text(recipient_id, text) do
+    %{
+      "recipient" => %{
+        "id" => recipient_id
+      },
+      "message" => %{
+        "text" => text
+      }
+    }
+  end
 end
