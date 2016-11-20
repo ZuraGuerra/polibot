@@ -28,20 +28,13 @@ defmodule Polibot.CountryServices do
   end
 
   def calculate_stats(country) do
-    "✍🏻 Name - #{country.name}
-    👩‍👩‍👧‍👦 Population - 679129841
+    "👩‍ Population - 679129841
     💰 Average salary - $86K
-    🏘 Human development - 72%
-    💲💲💲 Rich people - 12%
-    💲 Poor people - 27%
     🎂 Average age - 42
     🚶 Foreigners - 16%
-    🙏 Religion - Atheism
     ↔️ Tendency - Conservatism
-    👫 Gender
-      👩 Woman - 45%
-      👱 Man - 42%
-      👤 Other - 13%"
+    👩 Woman - 45%
+    👱 Man - 42%"
   end
 
   defp assign_random(:name) do

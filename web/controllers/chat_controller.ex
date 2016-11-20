@@ -36,8 +36,7 @@ defmodule Polibot.ChatController do
     # Send politic stats title
     stats_title = "https://github.com/ZuraGuerra/polibot/raw/master/web/static/images/presidential-stats.jpg"
     stats_message = MessageServices.image(candidate.fb_id, stats_title) |> Poison.encode!
-    HTTPotion.post!(@messages_url, [body: stats_message, status_code: 200,
-                                    headers: ["Content-Type": "application/json"]])
+    HTTPotion.post!(@messages_url, [body: stats_message, status_code: 200, headers: ["Content-Type": "application/json"]])
     # Send politic stats
     stats = CandidateServices.generate_stats(candidate)
     stats_message = MessageServices.text(candidate.fb_id, stats) |> Poison.encode!
@@ -78,6 +77,10 @@ defmodule Polibot.ChatController do
                                                    "sender" => %{"id" => user_id}}|_]}|_]}) do
     candidate = CandidateQueries.by_fb_id(user_id) |> Repo.one!
     country = Repo.get!(Country, candidate.country_id)
+    # Send politic stats title
+    stats_title = "https://github.com/ZuraGuerra/polibot/raw/master/web/static/images/country-stats.jpg"
+    stats_message = MessageServices.image(candidate.fb_id, stats_title) |> Poison.encode!
+    HTTPotion.post!(@messages_url, [body: stats_message, status_code: 200, headers: ["Content-Type": "application/json"]])
     # Send country stats
     stats = CountryServices.calculate_stats(country)
     stats_message = MessageServices.text(candidate.fb_id, stats) |> Poison.encode!
