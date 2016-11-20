@@ -15,11 +15,11 @@ defmodule Polibot.CountryServices do
 
   # Hardcoding because 4am ✨
   def map_url(country) do
-    case country.name do
-      "Roslilia" || "Bosnuda" -> @map_url <> "1.jpg"
-      "Wozla" || "Ostilias" -> @map_url <> "2.jpg"
-      "Uzkos" || "Zuristan" -> @map_url <> "3.jpg"
-      "Yozka" || "Yayprington" -> @map_url <> "4.jpg"
+    cond do
+      country.name == "Roslilia" || "Bosnuda" -> @map_url <> "1.jpg"
+      country.name == "Wozla" || "Ostilias" -> @map_url <> "2.jpg"
+      country.name == "Uzkos" || "Zuristan" -> @map_url <> "3.jpg"
+      country.name == "Yozka" || "Yayprington" -> @map_url <> "4.jpg"
     end
   end
 
