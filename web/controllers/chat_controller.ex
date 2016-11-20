@@ -1,7 +1,7 @@
 defmodule Polibot.ChatController do
   use Polibot.Web, :controller
   alias Polibot.{CandidateServices, CandidateQueries, CountryServices,
-                 MessageServices, Repo, Country}
+                 MessageServices, Repo, Country, StateServices}
 
   @messages_url "https://graph.facebook.com/v2.6/me/messages?access_token=" <> System.get_env("POLIBOT_FB_TOKEN")
 
@@ -10,6 +10,7 @@ defmodule Polibot.ChatController do
                                                    "recipient" => %{"id" => page_id},
                                                    "sender" => %{"id" => user_id}}|_]}|_]}) do
     country = CountryServices.create!
+    {states, _} = StateServices.create_many!(country, 4)
     candidate = CandidateServices.create!(user_id, country)
     avatar_url = CandidateServices.get_avatar(candidate)
 

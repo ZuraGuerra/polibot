@@ -6,7 +6,7 @@ defmodule Polibot.State do
     field :avg_salary, :integer
     field :human_development, :integer
     field :religion, :string
-    field :political_tendency, :integer
+    field :political_tendency, :string
     field :population, :integer
     field :density, :integer
     belongs_to :country, Polibot.Country

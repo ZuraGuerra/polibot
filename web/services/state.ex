@@ -2,11 +2,10 @@ defmodule Polibot.StateServices do
   alias Polibot.{State, StateChangesets, Repo}
 
   def create_many!(country, times),
-    do: Enum.map_reduce(1..times, country, fn(x, acc)-> {create!(country), country} end)
+    do: Enum.map_reduce(1..times, country, fn(x, acc) -> {create!(country), country} end)
 
   def create!(country) do
-    # *hardcoding intensifies*
-    state = generate_info(country.id))
+    info = generate_info(country.id)
     changeset = StateChangesets.creation(%State{}, info)
     case Repo.insert(changeset) do
       {:ok, state} -> state
