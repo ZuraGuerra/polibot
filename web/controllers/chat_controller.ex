@@ -16,7 +16,7 @@ defmodule Polibot.ChatController do
                                    headers: ["Content-Type": "application/json"]])
     # Send background story
     background_story = CandidateServices.generate_story(candidate)
-    buttons = [MessageServices.postback_button("View my presidential stats", "I'd like to view my presidential stats")]
+    buttons = [MessageServices.postback_button("View my stats", "View my stats")]
     background_message = MessageServices.button_template(candidate.fb_id, background_story, buttons) |> Poison.encode!
     HTTPotion.post!(@messages_url, [body: background_message, status_code: 200,
                                     headers: ["Content-Type": "application/json"]])
