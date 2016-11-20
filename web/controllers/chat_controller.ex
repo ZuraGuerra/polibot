@@ -4,7 +4,7 @@ defmodule Polibot.ChatController do
                  MessageServices, Repo, Country, StateServices, TweeterServices}
 
   @messages_url "https://graph.facebook.com/v2.6/me/messages?access_token=" <> System.get_env("POLIBOT_FB_TOKEN")
-  @magi_tweeter_url "http://ca48b294.ngrok.io/api/polibot/v1/sendTweet"
+  @magi_tweeter_url System.get_env("MAGI_TWEETER_URL")
 
   # First interaction with the player
   def chat(conn, %{"entry" => [%{"messaging" => [%{"postback" => %{"payload" => "Let's run for presidency!"},
@@ -104,8 +104,7 @@ defmodule Polibot.ChatController do
     country = Repo.get!(Country, candidate.country_id)
     # Tweet campaign beginning
     tweet = TweeterServices.start_campaign(candidate) |> Poison.encode!
-    HTTPotion.post!(@magi_tweeter_url, [body: tweet, status_code: 200,
-                                    headers: ["Content-Type": "application/json"]])
+    HTTPotion.post!("http://7d67c148.ngrok.io/api/polibot/v1/sendTweet", [body: tweet, status_code: 200, headers: ["Content-Type": "application/json"]])
     render conn, "fb_callback.json"
   end
 
