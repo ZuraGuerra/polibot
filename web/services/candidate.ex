@@ -3,8 +3,8 @@ defmodule Polibot.CandidateServices do
 
   @avatar_url "https://github.com/ZuraGuerra/polibot/raw/master/web/static/images/"
 
-  def create!(fb_id) do
-    info = generate_info(fb_id)
+  def create!(fb_id, country) do
+    info = generate_info(fb_id, country.id)
     changeset = CandidateChangesets.creation(%Candidate{}, info)
     case Repo.insert(changeset) do
       {:ok, candidate} -> candidate
@@ -43,10 +43,10 @@ defmodule Polibot.CandidateServices do
     @avatar_url <> candidate.gender <> "-" <> candidate.race <> ".jpg"
   end
 
-  defp generate_info(fb_id) do
+  defp generate_info(fb_id, country_id) do
     import Polibot.CandidateInfoServices
 
-    info = %{fb_id: fb_id}
+    info = %{fb_id: fb_id, country_id: country_id}
          |> Map.put(:race, assign_random(:race))
          |> Map.put(:gender, assign_random(:gender))
          |> Map.put(:was_poor, generate_boolean_state)

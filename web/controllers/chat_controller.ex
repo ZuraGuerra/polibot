@@ -10,7 +10,7 @@ defmodule Polibot.ChatController do
                                                    "recipient" => %{"id" => page_id},
                                                    "sender" => %{"id" => user_id}}|_]}|_]}) do
     country = CountryServices.create!
-    candidate = CandidateServices.create!(user_id)
+    candidate = CandidateServices.create!(user_id, country)
     avatar_url = CandidateServices.get_avatar(candidate)
 
     # Send avatar
