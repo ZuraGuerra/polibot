@@ -1,6 +1,6 @@
 defmodule Polibot.ChatController do
   use Polibot.Web, :controller
-  alias Polibot.{CandidateServices, MessageServices}
+  alias Polibot.{CandidateServices, MessageServices, Repo}
 
   @messages_url "https://graph.facebook.com/v2.6/me/messages?access_token=" <> System.get_env("POLIBOT_FB_TOKEN")
 
@@ -28,7 +28,7 @@ defmodule Polibot.ChatController do
   def chat(conn, %{"entry" => [%{"messaging" => [%{"postback" => %{"payload" => "View my stats"},
                                                    "recipient" => %{"id" => page_id},
                                                    "sender" => %{"id" => user_id}}|_]}|_]}) do
-    candidate = CandidateQueries.by_fb_id!(user_id)
+    candidate = CandidateQueries.by_fb_id(user_id) |> Repo.one!
 
     # Send politic stats title
     stats_title = "https://github.com/ZuraGuerra/polibot/raw/master/web/static/images/political-stats.jpg"
