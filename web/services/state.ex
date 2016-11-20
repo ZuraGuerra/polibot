@@ -18,7 +18,7 @@ defmodule Polibot.StateServices do
     |> Map.put(:avg_salary, generate_random_number(3))
     |> Map.put(:human_development, generate_random_percentage(40, 80))
     |> Map.put(:religion, assign_random(:religion))
-    |> Map.put(:political_tendency), assign_random(:tendency)
+    |> Map.put(:political_tendency, assign_random(:tendency))
     |> Map.put(:population, generate_random_number(7))
   end
 end
