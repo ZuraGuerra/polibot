@@ -104,7 +104,13 @@ defmodule Polibot.ChatController do
     country = Repo.get!(Country, candidate.country_id)
     # Tweet campaign beginning
     tweet = TweeterServices.start_campaign(candidate) |> Poison.encode!
-    HTTPotion.post!("http://7d67c148.ngrok.io/api/polibot/v1/sendTweet", [body: tweet, status_code: 200, headers: ["Content-Type": "application/json"]])
+    HTTPotion.post!(@magi_tweeter_url, [body: tweet, status_code: 200, headers: ["Content-Type": "application/json"]])
+    # Sent Talisman NEWS Twitter to candidate
+    talisman_invite = "Congrats! Remember that the global chain Talisman NEWS will be covering every move of your campaign."
+    buttons = [MessageServices.url_button("https://twitter.com/talismanNewsGJ", "Check Talisman NEWS")]
+    invite_message = MessageServices.button_template(candidate.fb_id, talisman_invite, buttons) |> Poison.encode!
+    HTTPotion.post!(@messages_url, [body: invite_message, status_code: 200,
+                                    headers: ["Content-Type": "application/json"]])
     render conn, "fb_callback.json"
   end
 
