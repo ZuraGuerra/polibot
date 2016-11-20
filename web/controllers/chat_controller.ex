@@ -63,6 +63,12 @@ defmodule Polibot.ChatController do
     map_message = MessageServices.image(candidate.fb_id, country_map) |> Poison.encode!
     HTTPotion.post!(@messages_url, [body: map_message, status_code: 200,
                                     headers: ["Content-Type": "application/json"]])
+    # Invite to see country stats
+    country_story = CountryServices.story(country)
+    buttons = [MessageServices.postback_button("Show country stats", "Show country stats")]
+    story_message = MessageServices.button_template(candidate.fb_id, country_story, buttons) |> Poison.encode!
+    HTTPotion.post!(@messages_url, [body: story_message, status_code: 200,
+                                    headers: ["Content-Type": "application/json"]])
     render conn, "fb_callback.json"
   end
 

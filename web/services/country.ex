@@ -23,6 +23,10 @@ defmodule Polibot.CountryServices do
     end
   end
 
+  def story(country) do
+    "This is your country: It's name is #{country.name}, it has 4 states."
+  end
+
   defp assign_random(:name) do
     [name] = Enum.take_random(@names, 1)
     name
