@@ -6,8 +6,21 @@ defmodule Polibot.ChatController do
   @messages_url "https://graph.facebook.com/v2.6/me/messages?access_token=" <> System.get_env("POLIBOT_FB_TOKEN")
   @magi_tweeter_url System.get_env("MAGI_TWEETER_URL")
 
-  # First interaction with the player
-  def chat(conn, %{"entry" => [%{"messaging" => [%{"postback" => %{"payload" => "Let's run for presidency!"},
+  # Candidate background info
+  def chat(conn, %{"entry" => [%{"messaging" => [%{"postback" => %{"payload" => "Let's start!"},
+                                                   "recipient" => %{"id" => page_id},
+                                                   "sender" => %{"id" => user_id}}|_]}|_]}) do
+    # Send intro
+    intro = "Hello! I'm your campaign assistant. Do you want me to remember you the details of your presidential race?"
+    buttons = [MessageServices.postback_button("Sure, please", "Sure, please")]
+    background_message = MessageServices.button_template(user_id, intro, buttons) |> Poison.encode!
+    HTTPotion.post!(@messages_url, [body: background_message, status_code: 200,
+                                   headers: ["Content-Type": "application/json"]])
+    render conn, "fb_callback.json"
+  end
+
+  # Candidate background info
+  def chat(conn, %{"entry" => [%{"messaging" => [%{"postback" => %{"payload" => "Sure, please"},
                                                    "recipient" => %{"id" => page_id},
                                                    "sender" => %{"id" => user_id}}|_]}|_]}) do
     country = CountryServices.create!
