@@ -4,6 +4,7 @@ defmodule Polibot.ChatController do
 
   @messages_url "https://graph.facebook.com/v2.6/me/messages?access_token=" <> System.get_env("POLIBOT_FB_TOKEN")
 
+  # First interaction with the player
   def chat(conn, %{"entry" => [%{"messaging" => [%{"postback" => %{"payload" => "Let's run for presidency!"},
                                                    "recipient" => %{"id" => page_id},
                                                    "sender" => %{"id" => user_id}}|_]}|_]}) do
@@ -20,6 +21,26 @@ defmodule Polibot.ChatController do
     background_message = MessageServices.button_template(candidate.fb_id, background_story, buttons) |> Poison.encode!
     HTTPotion.post!(@messages_url, [body: background_message, status_code: 200,
                                     headers: ["Content-Type": "application/json"]])
+    render conn, "fb_callback.json"
+  end
+
+  # Check player stats
+  def chat(conn, %{"entry" => [%{"messaging" => [%{"postback" => %{"payload" => "View my stats"},
+                                                   "recipient" => %{"id" => page_id},
+                                                   "sender" => %{"id" => user_id}}|_]}|_]}) do
+    candidate = CandidateQueries.by_fb_id!(user_id)
+
+    # Send politic stats title
+    stats_title = "https://github.com/ZuraGuerra/polibot/raw/master/web/static/images/political-stats.jpg"
+    stats_message = MessageServices.image(candidate.fb_id, stats_title) |> Poison.encode!
+    HTTPotion.post!(@messages_url, [body: stats_message, status_code: 200,
+                                  headers: ["Content-Type": "application/json"]])
+    # Send background story
+    background_story = CandidateServices.generate_story(candidate)
+    buttons = [MessageServices.postback_button("View my stats", "View my stats")]
+    background_message = MessageServices.button_template(candidate.fb_id, background_story, buttons) |> Poison.encode!
+    HTTPotion.post!(@messages_url, [body: background_message, status_code: 200,
+                                   headers: ["Content-Type": "application/json"]])
     render conn, "fb_callback.json"
   end
 
