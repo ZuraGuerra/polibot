@@ -14,6 +14,7 @@ defmodule Polibot.Candidate do
     field :last_name, :string
     field :tendency, :string
     field :charisma, :integer
+    belongs_to :country, Polibot.Country
 
     timestamps()
   end

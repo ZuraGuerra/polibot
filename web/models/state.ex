@@ -10,6 +10,7 @@ defmodule Polibot.State do
     field :population, :integer
     field :density, :integer
     belongs_to :country, Polibot.Country
+    has_one :demographic, Polibot.Demographic
 
     timestamps()
   end

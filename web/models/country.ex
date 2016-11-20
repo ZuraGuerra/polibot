@@ -3,6 +3,8 @@ defmodule Polibot.Country do
 
   schema "countries" do
     field :name, :string
+    has_many :states, Polibot.State
+    has_one :candidate, Polibot.Candidate
 
     timestamps()
   end
