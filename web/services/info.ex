@@ -18,7 +18,7 @@ defmodule Polibot.InfoServices do
     religion
   end
 
-  def assign_random(:state_names) do
+  def assign_random(:state_name) do
     [name] = Enum.take_random(@state_names, 1)
     name
   end
