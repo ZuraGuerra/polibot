@@ -1,8 +1,12 @@
 defmodule Polibot.StateServices do
-  alias Polibot.{State, StateChangesets, Repo}
+  alias Polibot.{State, StateChangesets, Repo, DemographicServices}
 
   def create_many!(country, times),
-    do: Enum.map_reduce(1..times, country, fn(x, acc) -> {create!(country), country} end)
+    do: Enum.map_reduce(1..times, country, fn(x, acc) ->
+      state = create!(country)
+      demographic = DemographicServices.create!(state)
+      {state, country}
+    end)
 
   def create!(country) do
     info = generate_info(country.id)
